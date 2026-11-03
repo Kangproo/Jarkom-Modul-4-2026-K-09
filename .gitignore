@@ -1,0 +1,7 @@
+# Folder konfigurasi Command Code (tidak bagian dari deliverable praktikum)
+.commandcode/
+
+# Catatan perintah download (bukan bagian dari deliverable praktikum)
+daftar-perintah-wget.md
+
+.gitignore
