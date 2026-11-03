@@ -59,7 +59,11 @@ Pengalokasian alamat IP diurutkan dari subnet dengan kebutuhan IP terbesar ke te
 | **A22** | 2 IP | /30 (255.255.255.252) | 10.68.16.84 | 10.68.16.87 | 10.68.16.85 - 10.68.16.86 |
 | **A24** | 2 IP | /30 (255.255.255.252) | 10.68.16.88 | 10.68.16.91 | 10.68.16.89 - 10.68.16.90 |
 
-**Catatan prefix dasar:** Total kebutuhan seluruh subnet adalah 2814 IP. Namun VLSM mengalokasikan per blok bulat (pangkat 2), dan setiap blok menyisakan 2 alamat (network + broadcast) yang tidak dapat dipakai host. Jika seluruh blok dijumlahkan, totalnya adalah 4188 alamat — melebihi kapasitas /20 yang hanya 4096 alamat. Oleh karena itu prefix dasar yang digunakan adalah **/19** (10.68.0.0 - 10.68.31.255, 8192 alamat), yaitu prefix terkecil yang dapat menampung seluruh blok.
+**Kebutuhan total dan ukuran blok VLSM:** Jika hanya dijumlahkan, kebutuhan seluruh subnet adalah **2814 IP**. Secara agregat, `/20` menyediakan 4096 alamat (4094 alamat host yang dapat digunakan), sehingga cukup untuk jumlah tersebut. Namun, VLSM membagi alamat ke subnet-subnet terpisah. Setiap subnet harus mendapat blok berukuran pangkat dua yang cukup untuk kebutuhannya. Berdasarkan prefix pada tabel, jumlah seluruh blok menjadi `2×1024 + 2×512 + 2×256 + 2×128 + 4×64 + 1×32 + 3×8 + 9×4 = 4188` alamat. Jumlah ini melebihi kapasitas `/20`, sehingga seluruh blok pada tabel tidak dapat dimuat ke dalam satu `/20`.
+
+**Dengan ukuran subnet pada tabel saat ini, `/19`** (10.68.0.0–10.68.31.255, 8192 alamat) adalah blok dasar terkecil yang cukup menampung seluruh alokasi. Jadi, `/20` cukup jika melihat total kebutuhan IP saja, sedangkan `/19` diperlukan untuk susunan blok VLSM yang tercantum.
+
+**Kesesuaian prefix tugas:** Soal meminta prefix sesuai alokasi masing-masing praktikan di mastersheet. Karena itu, pastikan hasil `/19` ini cocok dengan prefix yang diberikan untuk kelompok. Jika halaman SPS/mastersheet menetapkan `/20`, perbedaan ini harus dikonfirmasi dan perhitungan atau rancangan subnet disesuaikan sebelum konfigurasi dianggap final.
 
 ![Tabel VLSM](images/tabel-vlsm.png)
 
@@ -68,6 +72,31 @@ Pengalokasian alamat IP diurutkan dari subnet dengan kebutuhan IP terbesar ke te
 ## ⚙️ 4. Implementasi & Konfigurasi Routing
 
 Seluruh konfigurasi disimpan ke dalam file executable di direktori /root/setup.sh pada masing-masing node sesuai regulasi praktikum.
+
+### 4.0. Menjalankan Script pada Setiap Node
+File konfigurasi `.sh` harus dijalankan dari console **masing-masing node**. Mengunduh atau menyalin file saja belum menerapkan konfigurasi; jalankan:
+
+```bash
+bash /root/setup.sh
+```
+
+Gunakan script yang sesuai dengan nama node (router atau host). Perintah unduh pada [daftar-perintah-wget.md](Script%20pernode/daftar-perintah-wget.md) sudah mengunduh file sebagai `/root/setup.sh` lalu langsung menjalankannya. Ulangi langkah tersebut untuk semua node.
+
+Setelah dijalankan, verifikasi alamat dan route pada node dengan:
+
+```bash
+ip -br addr
+ip route
+```
+
+Tes dulu gateway lokal, lalu alamat IP node lain:
+
+```bash
+ping -c 3 <IP-gateway>
+ping -c 3 <IP-node-tujuan>
+```
+
+Jika script belum dijalankan pada host atau router yang diperlukan, alamat IP dan route belum diterapkan sehingga koneksi ke subnet lain dapat gagal. Isi `/etc/resolv.conf` hanya diperlukan untuk menerjemahkan nama domain; DNS kosong tidak menghalangi ping yang menggunakan alamat IP. Konfigurasi yang dijalankan langsung dari terminal mungkin perlu dijalankan kembali setelah node dimulai ulang.
 
 ### 4.1. Router Cyberia (Gateway Internet & NAT)
 Router Cyberia berfungsi sebagai satu-satunya jembatan antara jaringan The Wired dan dunia luar (NAT1).
@@ -103,11 +132,22 @@ Setiap host dikonfigurasi dengan IP statis dan diarahkan ke default gateway rout
 ---
 
 ## 🧪 5. Pengujian Konektivitas Jaringan (Testing Ping)
-*(Bagian ini akan dilengkapi dengan tangkapan layar pengujian ping end-to-end)*
+Soal mensyaratkan seluruh node pada topologi dapat saling terhubung dan melakukan ping. Bukti berikut mendokumentasikan pengujian lintas subnet antara Karl (`10.68.0.2`) dan Lain (`10.68.15.2`) pada kedua arah.
 
-1. **Ping Host ke Default Gateway**: Memverifikasi konektivitas layer 2 dan layer 3 lokal.
-2. **Ping Antar Cabang Terjauh (Lain ke Karl)**: Memverifikasi kebenaran seluruh tabel routing statis dari ujung kanan bawah hingga ujung kiri atas melewati 7 router.
-3. **Ping ke Internet (8.8.8.8)**: Memverifikasi berfungsinya default route dan NAT iptables di Cyberia.
+### Karl ke Lain
+Ping berhasil: 4 paket diterima, tanpa packet loss.
+
+![Bukti ping dari Karl ke Lain](images/ping-karl-ke-lain.png)
+
+### Lain ke Karl
+Ping berhasil: 3 paket diterima, tanpa packet loss.
+
+![Bukti ping dari Lain ke Karl](images/ping-lain-ke-karl.png)
+
+### Lain ke interface Psyche
+Ping dari Lain ke `10.68.0.1` (interface router Psyche di subnet Karl) berhasil: 3 paket diterima, tanpa packet loss. Ini merupakan bukti tambahan bahwa Lain dapat mencapai router pada subnet Karl.
+
+![Bukti ping dari Lain ke Psyche](images/ping-lain-ke-psyche.png)
 
 ---
 
