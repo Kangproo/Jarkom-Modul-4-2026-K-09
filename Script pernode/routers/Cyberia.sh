@@ -17,4 +17,4 @@ iptables -t nat -F
 iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 
 # 4. Routing ke seluruh The Wired
-ip route add 10.68.0.0/20 via 10.68.16.58
+ip route add 10.68.0.0/19 via 10.68.16.58

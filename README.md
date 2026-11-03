@@ -12,7 +12,7 @@
 ## 📖 1. Pendahuluan & Latar Belakang
 Pada praktikum Modul 4 ini, dirancang sebuah arsitektur jaringan berskala besar bertema **The Wired Expansion**. Jaringan ini menghubungkan 13 Router dan 25 Host/Client yang saling terdistribusi ke dalam beberapa domain broadcast.
 
-Seluruh jaringan dialokasikan secara efisien menggunakan metode **VLSM (Variable Length Subnet Masking)** berbasis alokasi prefix utama **10.68.0.0/20**, diimplementasikan pada platform simulator **GNS3** menggunakan Docker image **rdhptr21/debinet:latest** (Debian Linux).
+Seluruh jaringan dialokasikan secara efisien menggunakan metode **VLSM (Variable Length Subnet Masking)** berbasis alokasi prefix utama **10.68.0.0/19**, diimplementasikan pada platform simulator **GNS3** menggunakan Docker image **rdhptr21/debinet:latest** (Debian Linux).
 
 ---
 
@@ -29,7 +29,7 @@ Topologi terdiri dari:
 ## 📊 3. Perhitungan Subnetting (VLSM)
 Pengalokasian alamat IP diurutkan dari subnet dengan kebutuhan IP terbesar ke terkecil (*descending*) agar tidak terjadi pemborosan alamat dan overlap.
 
-### 📋 Tabel Alokasi VLSM (Prefix Dasar: 10.68.0.0/20)
+### 📋 Tabel Alokasi VLSM (Prefix Dasar: 10.68.0.0/19)
 
 | Subnet | Kebutuhan Host + Router | Netmask (Prefix) | Network ID | Broadcast ID | Usable IP Range |
 | :---: | :---: | :---: | :---: | :---: | :---: |
@@ -59,6 +59,8 @@ Pengalokasian alamat IP diurutkan dari subnet dengan kebutuhan IP terbesar ke te
 | **A22** | 2 IP | /30 (255.255.255.252) | 10.68.16.84 | 10.68.16.87 | 10.68.16.85 - 10.68.16.86 |
 | **A24** | 2 IP | /30 (255.255.255.252) | 10.68.16.88 | 10.68.16.91 | 10.68.16.89 - 10.68.16.90 |
 
+**Catatan prefix dasar:** Total kebutuhan seluruh subnet adalah 2814 IP. Namun VLSM mengalokasikan per blok bulat (pangkat 2), dan setiap blok menyisakan 2 alamat (network + broadcast) yang tidak dapat dipakai host. Jika seluruh blok dijumlahkan, totalnya adalah 4188 alamat — melebihi kapasitas /20 yang hanya 4096 alamat. Oleh karena itu prefix dasar yang digunakan adalah **/19** (10.68.0.0 - 10.68.31.255, 8192 alamat), yaitu prefix terkecil yang dapat menampung seluruh blok.
+
 ![Tabel VLSM](images/tabel-vlsm.png)
 
 ---
@@ -71,7 +73,7 @@ Seluruh konfigurasi disimpan ke dalam file executable di direktori /root/setup.s
 Router Cyberia berfungsi sebagai satu-satunya jembatan antara jaringan The Wired dan dunia luar (NAT1).
 * Interface eth0 memperoleh IP otomatis dari NAT1 (192.168.122.157/24).
 * Mengaktifkan IP forwarding dan aturan iptables NAT MASQUERADE.
-* Menambahkan static route ke seluruh jaringan The Wired (10.68.0.0/20) melalui Router Wired (10.68.16.58).
+* Menambahkan static route ke seluruh jaringan The Wired (10.68.0.0/19) melalui Router Wired (10.68.16.58).
 
 ![Konfigurasi Cyberia](images/config-cyberia.png)
 
@@ -127,5 +129,6 @@ Setiap host dikonfigurasi dengan IP statis dan diarahkan ke default gateway rout
 │       ├── Karl.sh
 │       ├── Lain.sh
 │       └── ... (25 file host)
+├── daftar-perintah-wget.md
 └── README.md
 `
