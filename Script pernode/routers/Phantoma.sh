@@ -14,5 +14,8 @@ ip link set eth1 up
 ip addr add 10.68.16.89/30 dev eth2
 ip link set eth2 up
 
+# Default route naik ke Knights
 ip route add default via 10.68.16.85
+
+# Route ke Subnet Lain & Mika (A25) via Shibuya
 ip route add 10.68.15.0/26 via 10.68.16.90
