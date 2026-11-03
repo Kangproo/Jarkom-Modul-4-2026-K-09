@@ -3,20 +3,20 @@
 
 ---
 
-### 👥 Anggota Kelompok (Kelompok K-09)
+### Anggota Kelompok (Kelompok K-09)
 * **Sultan Ahmad Maulana Bahyshidqi** — 502751070
 * **Muhammad Razzan Azizi Djuhari** — 5027251086
 
 ---
 
-## 📖 1. Pendahuluan & Latar Belakang
+## 1. Pendahuluan & Latar Belakang
 Pada praktikum Modul 4 ini, dirancang sebuah arsitektur jaringan berskala besar bertema **The Wired Expansion**. Jaringan ini menghubungkan 13 Router dan 25 Host/Client yang saling terdistribusi ke dalam beberapa domain broadcast.
 
 Seluruh jaringan dialokasikan secara efisien menggunakan metode **VLSM (Variable Length Subnet Masking)** berbasis alokasi prefix utama **10.68.0.0/19**, diimplementasikan pada platform simulator **GNS3** menggunakan Docker image **rdhptr21/debinet:latest** (Debian Linux).
 
 ---
 
-## 🗺️ 2. Topologi Jaringan GNS3
+## 2. Topologi Jaringan GNS3
 Topologi terdiri dari:
 * **1 Gateway Internet / NAT**: Router Cyberia terhubung langsung ke NAT1.
 * **13 Router**: Cyberia, Wired, Psyche, Copland, Schumann, Accela, Navi, Tachibana, Deus, Protocol7, Knights, Phantoma, Shibuya.
@@ -26,7 +26,7 @@ Topologi terdiri dari:
 
 ---
 
-## 📊 3. Perhitungan Subnetting (VLSM)
+##  3. Perhitungan Subnetting (VLSM)
 Pengalokasian alamat IP diurutkan dari subnet dengan kebutuhan IP terbesar ke terkecil (*descending*) agar tidak terjadi pemborosan alamat dan overlap.
 
 ### 📋 Tabel Alokasi VLSM (Prefix Dasar: 10.68.0.0/19)
@@ -59,17 +59,13 @@ Pengalokasian alamat IP diurutkan dari subnet dengan kebutuhan IP terbesar ke te
 | **A22** | 2 IP | /30 (255.255.255.252) | 10.68.16.84 | 10.68.16.87 | 10.68.16.85 - 10.68.16.86 |
 | **A24** | 2 IP | /30 (255.255.255.252) | 10.68.16.88 | 10.68.16.91 | 10.68.16.89 - 10.68.16.90 |
 
-**Kebutuhan total dan ukuran blok VLSM:** Jika hanya dijumlahkan, kebutuhan seluruh subnet adalah **2814 IP**. Secara agregat, `/20` menyediakan 4096 alamat (4094 alamat host yang dapat digunakan), sehingga cukup untuk jumlah tersebut. Namun, VLSM membagi alamat ke subnet-subnet terpisah. Setiap subnet harus mendapat blok berukuran pangkat dua yang cukup untuk kebutuhannya. Berdasarkan prefix pada tabel, jumlah seluruh blok menjadi `2×1024 + 2×512 + 2×256 + 2×128 + 4×64 + 1×32 + 3×8 + 9×4 = 4188` alamat. Jumlah ini melebihi kapasitas `/20`, sehingga seluruh blok pada tabel tidak dapat dimuat ke dalam satu `/20`.
-
-**Dengan ukuran subnet pada tabel saat ini, `/19`** (10.68.0.0–10.68.31.255, 8192 alamat) adalah blok dasar terkecil yang cukup menampung seluruh alokasi. Jadi, `/20` cukup jika melihat total kebutuhan IP saja, sedangkan `/19` diperlukan untuk susunan blok VLSM yang tercantum.
-
-**Kesesuaian prefix tugas:** Soal meminta prefix sesuai alokasi masing-masing praktikan di mastersheet. Karena itu, pastikan hasil `/19` ini cocok dengan prefix yang diberikan untuk kelompok. Jika halaman SPS/mastersheet menetapkan `/20`, perbedaan ini harus dikonfirmasi dan perhitungan atau rancangan subnet disesuaikan sebelum konfigurasi dianggap final.
+**Catatan prefix dasar:** Total kebutuhan seluruh subnet adalah 2814 IP. Namun VLSM mengalokasikan per blok bulat (pangkat 2), dan setiap blok menyisakan 2 alamat (network + broadcast) yang tidak dapat dipakai host. Jika seluruh blok dijumlahkan, totalnya adalah 4188 alamat — melebihi kapasitas /20 yang hanya 4096 alamat. Oleh karena itu prefix dasar yang digunakan adalah **/19** (10.68.0.0 - 10.68.31.255, 8192 alamat), yaitu prefix terkecil yang dapat menampung seluruh blok.
 
 ![Tabel VLSM](images/tabel-vlsm.png)
 
 ---
 
-## ⚙️ 4. Implementasi & Konfigurasi Routing
+## 4. Implementasi & Konfigurasi Routing
 
 Seluruh konfigurasi disimpan ke dalam file executable di direktori /root/setup.sh pada masing-masing node sesuai regulasi praktikum.
 
@@ -131,7 +127,7 @@ Setiap host dikonfigurasi dengan IP statis dan diarahkan ke default gateway rout
 
 ---
 
-## 🧪 5. Pengujian Konektivitas Jaringan (Testing Ping)
+## 5. Pengujian Konektivitas Jaringan (Testing Ping)
 Soal mensyaratkan seluruh node pada topologi dapat saling terhubung dan melakukan ping. Bukti berikut mendokumentasikan pengujian lintas subnet antara Karl (`10.68.0.2`) dan Lain (`10.68.15.2`) pada kedua arah.
 
 ### Karl ke Lain
@@ -151,24 +147,3 @@ Ping dari Lain ke `10.68.0.1` (interface router Psyche di subnet Karl) berhasil:
 
 ---
 
-## 📁 6. Struktur Direktori Repository
-`	ext
-├── images/
-│   ├── topologi-gns3.png
-│   ├── tabel-vlsm.png
-│   ├── config-cyberia.png
-│   ├── config-wired.png
-│   ├── config-psyche.png
-│   └── config-lain.png
-├── Script pernode/
-│   ├── routers/
-│   │   ├── Cyberia.sh
-│   │   ├── Wired.sh
-│   │   └── ... (13 file router)
-│   └── hosts/
-│       ├── Karl.sh
-│       ├── Lain.sh
-│       └── ... (25 file host)
-├── daftar-perintah-wget.md
-└── README.md
-`
