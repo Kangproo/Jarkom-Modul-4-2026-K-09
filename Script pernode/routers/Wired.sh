@@ -37,5 +37,8 @@ ip route add 10.68.15.0/26 via 10.68.16.66
 ip route add 10.68.15.128/26 via 10.68.16.66
 ip route add 10.68.16.0/27 via 10.68.16.66
 ip route add 10.68.16.48/29 via 10.68.16.66
-ip route add 10.68.16.72/29 via 10.68.16.66
-ip route add 10.68.16.80/28 via 10.68.16.66
+ip route add 10.68.16.72/30 via 10.68.16.66 # A16
+ip route add 10.68.16.76/30 via 10.68.16.66 # A18
+ip route add 10.68.16.80/30 via 10.68.16.66 # A20
+ip route add 10.68.16.84/30 via 10.68.16.66 # A22
+ip route add 10.68.16.88/30 via 10.68.16.66 # A24
