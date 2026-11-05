@@ -219,7 +219,7 @@ Penggabungan dilakukan dalam tiga tahap. Tahap I menggabungkan subnet yang ukura
 | III | D1 | C2 (/22) + C3 (/22) | /21 |
 | III | D2 | C1 (/20) + D1 (/21), juga mencakup C4 | /19 |
 
-![Pohon Pembagian IP CIDR](images/pohon-cidr.png)
+[Pohon Pembagian IP CIDR](https://drive.google.com/file/d/1pOGe9kod6DhfCq2ktxZAdtco8iAClci3/view)
 
 ---
 
@@ -245,8 +245,6 @@ interface Ethernet0/0/0
 ip route 10.68.0.0 255.255.224.0 10.68.24.130
 ```
 
-![Konfigurasi Cyberia](images/config-cyberia-cpt.png)
-
 ### 8.2. Router Wired
 Wired terhubung ke empat arah, yaitu Cyberia, Switch2, Navi, dan Tachibana. IP pada setiap interface Wired adalah:
 * `FastEthernet0/0`: **10.68.10.65/29**, ke Switch2.
@@ -263,22 +261,16 @@ ip route 10.68.16.0 255.255.252.0 10.68.18.66
 ip route 10.68.20.0 255.255.252.0 10.68.23.62
 ```
 
-![Konfigurasi Wired](images/config-wired-cpt.png)
-
 ### 8.3. Router Psyche
 Psyche digunakan untuk menghubungkan Karl dan Lin pada subnet A6. IP `FastEthernet0/1` adalah **10.68.0.1/22** sebagai gateway host, lalu `FastEthernet0/0` menggunakan **10.68.10.66/29** untuk terhubung ke Switch2.
 
 Default route Psyche diarahkan ke Wired (`10.68.10.65`). Setelah dicek menggunakan `show ip interface brief`, kedua port sudah `up/up` dan default route juga muncul pada `show ip route`.
-
-![Konfigurasi Psyche](images/config-psyche-cpt.png)
 
 ### 8.4. Konfigurasi Host (Contoh: Lain)
 Setiap host diberi IP dan gateway sesuai subnetnya. Sebagai contoh, Lain berada pada subnet A25 dengan konfigurasi:
 * IP Address: **10.68.22.194**
 * Subnet Mask: **255.255.255.192**
 * Default Gateway: **10.68.22.193** (Shibuya)
-
-![Konfigurasi Lain](images/config-lain-cpt.png)
 
 ---
 
@@ -288,31 +280,31 @@ Setelah konfigurasi IP dan routing, dilakukan ping antarhost melalui **Desktop >
 ### Karl ke Lain dan Lain ke Karl
 Ping dari Karl (`10.68.0.2`) ke Lain (`10.68.22.194`) berhasil, begitu juga dari Lain ke Karl. Hasil pengujian ulang di kedua arah menunjukkan 4 paket diterima dan 0% loss.
 
-![Ping Karl dan Lain](images/ping-karl-lain-cpt.png)
+![Ping Karl dan Lain](images/K09-Modul4-CIDR-Ping-Karl-Lain.png)
 
 ### JJ ke Omnipresence
 JJ (`10.68.24.2`) melakukan ping ke Omnipresence (`10.68.4.2`). Setelah dicoba lagi, hasilnya 4 paket diterima dan tidak ada paket yang hilang.
 
-![Ping JJ ke Omnipresence](images/ping-jj-omnipresence-cpt.png)
+![Ping JJ ke Omnipresence](images/K09-Modul4-CIDR-Ping-JJ-Omnipresence.png)
 
 ### JJ ke Alice dan Collective
 Ping JJ ke Alice (`10.68.16.2`) dan Collective (`10.68.20.2`) juga berhasil. Keduanya mendapat 4 reply dengan 0% packet loss.
 
-![Ping JJ ke Alice](images/ping-jj-alice-cpt.png)
+![Ping JJ ke Alice](images/K09-Modul4-CIDR-Ping-JJ-Alice.png)
 
-![Ping JJ ke Collective](images/ping-jj-collective-cpt.png)
+![Ping JJ ke Collective](images/K09-Modul4-CIDR-Ping-JJ-Collective.png)
 
 ### JJ ke Chisa dan Semi
 Untuk mencoba jalur yang lebih jauh, JJ melakukan ping ke Chisa (`10.68.22.130`) dan Semi (`10.68.23.2`). Hasil keduanya 4 reply dan 0% loss.
 
-![Ping JJ ke Chisa](images/ping-jj-chisa-cpt.png)
+![Ping JJ ke Chisa](images/K09-Modul4-CIDR-Ping-JJ-Chisa.png)
 
-![Ping JJ ke Semi](images/ping-jj-semi-cpt.png)
+![Ping JJ ke Semi](images/K09-Modul4-CIDR-Ping-JJ-Semi.png)
 
 ### Reika ke Akashic
 Pengujian lain dilakukan dari Reika (`10.68.16.3`) ke Akashic (`10.68.10.74`). Ping kedua berhasil menerima 4 paket tanpa packet loss.
 
-![Ping Reika ke Akashic](images/ping-reika-akashic-cpt.png)
+![Ping Reika ke Akashic](images/K09-Modul4-CIDR-Ping-Reika-Akashic.png)
 
 Pengujian di atas menunjukkan beberapa cabang sudah dapat saling terhubung. Namun, yang didokumentasikan baru beberapa contoh ping, belum pengujian satu per satu untuk semua pasangan node.
 
@@ -324,6 +316,7 @@ Pada Cisco Packet Tracer, IP untuk 25 subnet sudah dimasukkan sesuai tabel CIDR 
 Pengujian yang ditampilkan masih berupa beberapa sampel ping. Koneksi eksternal lewat Cloud juga belum diuji, jadi belum dimasukkan sebagai hasil pengujian.
 
 Berkas simulasi dan pembagian IP: [Cisco Packet Tracer (.pkt)](https://drive.google.com/file/d/1mExQTLCAiR4GjSxOQW_UHOaMVAjuF97K/view) dan [spreadsheet CIDR](https://docs.google.com/spreadsheets/d/1_XzT5qJeQtYygXIKjYKCix1CHkUHeK53sgwfx0uzLeM/edit).
+
 
 ![Bukti ping dari Lain ke Psyche](images/ping-lain-ke-psyche.png)
 
