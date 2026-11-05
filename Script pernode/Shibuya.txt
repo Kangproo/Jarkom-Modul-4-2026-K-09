@@ -1,0 +1,14 @@
+enable
+configure terminal
+hostname Shibuya
+interface FastEthernet0/1
+ip address 10.68.23.58 255.255.255.252
+no shutdown
+exit
+interface FastEthernet0/0
+ip address 10.68.22.193 255.255.255.192
+no shutdown
+exit
+ip route 0.0.0.0 0.0.0.0 10.68.23.57
+end
+copy running-config startup-config
