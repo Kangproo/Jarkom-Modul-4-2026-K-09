@@ -1,0 +1,21 @@
+enable
+configure terminal
+hostname Knights
+interface Ethernet0/0/0
+ip address 10.68.23.50 255.255.255.252
+no shutdown
+exit
+interface FastEthernet0/0
+ip address 10.68.23.33 255.255.255.248
+no shutdown
+exit
+interface FastEthernet0/1
+ip address 10.68.23.53 255.255.255.252
+no shutdown
+exit
+ip route 0.0.0.0 0.0.0.0 10.68.23.49
+ip route 10.68.22.192 255.255.255.192 10.68.23.54
+ip route 10.68.23.0 255.255.255.224 10.68.23.54
+ip route 10.68.23.56 255.255.255.252 10.68.23.54
+end
+copy running-config startup-config

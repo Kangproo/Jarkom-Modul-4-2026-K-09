@@ -1,0 +1,11 @@
+Nama node: Lain
+Subnet: A25 (10.68.22.192/26)
+Router gateway: Shibuya
+
+Desktop > IP Configuration > Static
+IP Address: 10.68.22.194
+Subnet Mask: 255.255.255.192
+Default Gateway: 10.68.22.193
+DNS Server: (kosong / sesuai instruksi soal)
+
+Catatan: ini data konfigurasi, bukan file script yang bisa dijalankan di PC Packet Tracer.

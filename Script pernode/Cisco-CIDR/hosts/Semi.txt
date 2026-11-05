@@ -1,0 +1,11 @@
+Nama node: Semi
+Subnet: A23 (10.68.23.0/27)
+Router gateway: Phantoma
+
+Desktop > IP Configuration > Static
+IP Address: 10.68.23.2
+Subnet Mask: 255.255.255.224
+Default Gateway: 10.68.23.1
+DNS Server: (kosong / sesuai instruksi soal)
+
+Catatan: ini data konfigurasi, bukan file script yang bisa dijalankan di PC Packet Tracer.

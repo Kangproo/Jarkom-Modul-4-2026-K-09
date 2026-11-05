@@ -1,0 +1,11 @@
+Nama node: Akashic
+Subnet: A9 (10.68.10.72/29)
+Router gateway: Schumann
+
+Desktop > IP Configuration > Static
+IP Address: 10.68.10.74
+Subnet Mask: 255.255.255.248
+Default Gateway: 10.68.10.73
+DNS Server: (kosong / sesuai instruksi soal)
+
+Catatan: ini data konfigurasi, bukan file script yang bisa dijalankan di PC Packet Tracer.
