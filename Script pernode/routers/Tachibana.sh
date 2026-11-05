@@ -19,7 +19,7 @@ ip route add default via 10.68.16.65
 
 # Route ke bawah (Deus, Protocol7, Knights, Phantoma, Shibuya/Lain)
 ip route add 10.68.14.128/25 via 10.68.16.74
-ip route replace 10.68.16.76/30 via 10.68.16.74 # A18: jalur balik ke Protocol7
+ip route add 10.68.16.76/30 via 10.68.16.74
 ip route add 10.68.15.128/26 via 10.68.16.74
 ip route add 10.68.16.80/30 via 10.68.16.74
 ip route add 10.68.16.48/29 via 10.68.16.74

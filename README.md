@@ -1,5 +1,5 @@
 # Laporan Resmi Praktikum Komunikasi Data & Jaringan Komputer 2026
-## Modul 4: Subnetting VLSM & Routing pada GNS3 (The Wired Expansion)
+## Modul 4: Subnetting VLSM & CIDR pada GNS3 dan CPT (The Wired Expansion)
 
 ---
 
@@ -23,6 +23,14 @@ Topologi terdiri dari:
 * **25 Host / Client**: JJ, MyuMyu, Karl, Lin, Juri, Masayuki, Akashic, Omnipresence, Denpa, Alice, Reika, Taro, Yasuo, Miho, Kuma, Collective, Ghost, Lilith, Specter, Chisa, Hodgeson, Eiri, Semi, Lain, Mika.
 
 ![Topologi GNS3](images/topologi-gns3.png)
+
+### 2.1. Rute dan Jumlah IP per Subnet
+
+Gambar berikut merangkum rute jaringan, kebutuhan IP tiap subnet, dan prefix netmask yang digunakan.
+
+![Tabel rute dan jumlah IP subnet](images/route-jumlah-ip-subnet.png)
+
+**Catatan:** Total 2814 IP dan prefix `/20` pada gambar menunjukkan kebutuhan IP mentah. Perhitungan blok VLSM pada bagian berikut menggunakan prefix dasar `/19`, karena ukuran blok yang dibulatkan membutuhkan total 4188 alamat.
 
 ---
 
@@ -142,6 +150,8 @@ Ping berhasil: 3 paket diterima, tanpa packet loss.
 
 ### Lain ke interface Psyche
 Ping dari Lain ke `10.68.0.1` (interface router Psyche di subnet Karl) berhasil: 3 paket diterima, tanpa packet loss. Ini merupakan bukti tambahan bahwa Lain dapat mencapai router pada subnet Karl.
+
+![Bukti ping dari Lain ke Psyche](images/ping-lain-ke-psyche.png)
 
 ## 6. Topologi Jaringan Cisco Packet Tracer
 Pada Cisco Packet Tracer, topologi yang dibuat sama dengan topologi GNS3 sesuai gambar soal. Yang berbeda adalah pembagian alamat IP-nya, karena di bagian Cisco digunakan metode CIDR.
@@ -311,14 +321,14 @@ Pengujian di atas menunjukkan beberapa cabang sudah dapat saling terhubung. Namu
 ---
 
 ## 10. Kesimpulan
-Pada Cisco Packet Tracer, IP untuk 25 subnet sudah dimasukkan sesuai tabel CIDR dan setiap router dikonfigurasi menggunakan static routing. Dari beberapa ping yang dilakukan, komunikasi antarcabang berhasil. Contohnya Karl dengan Lain, JJ ke beberapa host di cabang berbeda, serta Reika ke Akashic.
+Praktikum ini menghasilkan jaringan dengan 13 router dan 25 host yang dikonfigurasi di GNS3 dan Cisco Packet Tracer. Pembagian alamat dilakukan menggunakan VLSM/CIDR, lalu rute statis dipasang agar subnet-subnet dapat saling dijangkau. Kebutuhan mentahnya 2814 IP, sedangkan ukuran blok VLSM setelah pembulatan berjumlah 4188 alamat; karena itu alokasi pada laporan menggunakan prefix dasar `10.68.0.0/19`.
 
-Pengujian yang ditampilkan masih berupa beberapa sampel ping. Koneksi eksternal lewat Cloud juga belum diuji, jadi belum dimasukkan sebagai hasil pengujian.
+Pengujian ping yang dicatat menunjukkan konektivitas berhasil pada beberapa pasangan lintas subnet, termasuk Karl–Lain, JJ ke sejumlah host cabang lain, Reika–Akashic, dan Lain ke interface Psyche. Hasil ini berlaku untuk pasangan yang diuji; belum semua pasangan node diuji satu per satu. Koneksi eksternal melalui NAT/Cloud juga belum terverifikasi.
 
 Berkas simulasi dan pembagian IP: [Cisco Packet Tracer (.pkt)](https://drive.google.com/file/d/1mExQTLCAiR4GjSxOQW_UHOaMVAjuF97K/view) dan [spreadsheet CIDR](https://docs.google.com/spreadsheets/d/1_XzT5qJeQtYygXIKjYKCix1CHkUHeK53sgwfx0uzLeM/edit).
 
 
-![Bukti ping dari Lain ke Psyche](images/ping-lain-ke-psyche.png)
+
 
 ---
 
